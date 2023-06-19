@@ -47,8 +47,8 @@ public class UserController {
 	public ResponseEntity<User> addUser(@RequestBody User u) {
 		User user=null;
 		try{
-			u=this.userService.addBook(u);
-			return ResponseEntity.of(Optional.of(user));
+			this.userService.addBook(u);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -56,9 +56,9 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/users/{id}")
-	public ResponseEntity<User> deleteUserById(@PathVariable("id") int id ) {
-		try { User u=userService.deleteUserById(id);
-		return ResponseEntity.of(Optional.of(u));
+	public ResponseEntity<Void> deleteUserById(@PathVariable("id") int id ) {
+		try { userService.deleteUserById(id);
+		return ResponseEntity.status(HttpStatus.OK).build();
 		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

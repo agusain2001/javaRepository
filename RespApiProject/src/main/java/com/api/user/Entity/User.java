@@ -1,9 +1,13 @@
 package com.api.user.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class User {
@@ -11,8 +15,10 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
-	private String city;
-	public User(int id, String name, String city) {
+	@OneToOne(cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private City city;
+	public User(int id, String name, City city) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,10 +40,10 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCity() {
+	public City getCity() {
 		return city;
 	}
-	public void setCity(String city) {
+	public void setCity(City city) {
 		this.city = city;
 	}
 	@Override
