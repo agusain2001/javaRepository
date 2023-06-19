@@ -1,60 +1,49 @@
 package com.api.user.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.api.user.Entity.User;
+import com.api.user.dao.userRepository;
 
 @Component
 public class UserService {
-	private static List<User> list = new ArrayList<>();
-	static {
-		list.add(new User(1,"Ashish","ktd"));
-		list.add(new User(2,"AshishG","dun"));
-	}
+	@Autowired
+	private userRepository userRep;
 	
 	public List<User> getAllUsers(){
+		List<User> list =(List<User>) userRep.findAll();
 		return list;
 	}
 	
 	public User getUserById(int id) {
 		User user=null;
 		try {
-	 user=list.stream().filter(e->e.getId()==id).findFirst().get();}
-		catch(Exception e) {
+			user = userRep.findById(id);}
+			catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 	 return user;
 	}
 	
-	public User addBook(User u) {
-		list.add(u);
-		return u;
+	public void addBook(User u) {
+		userRep.save(u);
 	}
 	
-	public User deleteUserById(int id) {
-		User user=null;
-		 user=list.stream().filter(e->e.getId()==id).findFirst().get();
-		list.remove(user);
-		 return user;
+	public void deleteUserById(int id) {
+		userRep.deleteById(id); 
 	}
 	
 	public void deleteAllUser(){
-		list=null;
+		userRep.deleteAll();
 	}
 
 	public void updateUserById(User user,int id) {
-		 list=list.stream().map(b->{
-			 if(b.getId()==id) {
-				 b.setName(user.getName());
-				 b.setCity(user.getCity());
-			 }
-			 return b;
-		 }).collect(Collectors.toList());
+		 user.setId(id);
+		 userRep.save(user);
 	}
 	
 	
